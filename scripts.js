@@ -11,7 +11,9 @@ function getComputerChoice()
 
 function getHumanChoice()
 {
-    let choice = prompt("What do you want to play?");
+    let choice = prompt(`Disclaimer: The program is not case sensitive
+                         A choice that is not one of the above will lead to an error.
+                         Make your choice Rock, Paper or Scizzors?`);
     let str = choice.toLowerCase();
     if((str === "rock") || (str === "paper") || (str === "scizzors")) 
         return str
@@ -87,5 +89,4 @@ function playGame()
 }
 
 playGame();
-
 
