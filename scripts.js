@@ -12,19 +12,20 @@ function getComputerChoice()
 function getHumanChoice()
 {
     let choice = prompt(`Disclaimer: The program is not case sensitive
-                         A choice that is not one of the above will lead to an error.
-                         Make your choice Rock, Paper or Scizzors?`);
+                        A choice that is not one of the above will lead to an 
+                        error.
+                        Make your choice Rock, Paper or Scizzors?`);
     let str = choice.toLowerCase();
     if((str === "rock") || (str === "paper") || (str === "scizzors")) 
         return str
-    console.log("Error! You must choose between rock, paper and scizzors!")
+    return "none"
 }
 
 function playRound(humanChoice, computerChoice)
 {
     if(humanChoice === computerChoice)
     {
-        console.log("Same choice! No one wins!")
+        alert("Same choice! No one wins!")
         return "none";
     }
 
@@ -32,10 +33,10 @@ function playRound(humanChoice, computerChoice)
     {
         if(computerChoice === "paper")
         {
-            console.log(`${computerChoice} beets ${humanChoice}! Computer wins!`);
+            alert(`${computerChoice} beets ${humanChoice}! Computer wins!`);
             return "computer";
         }
-        console.log(`${humanChoice} beets ${computerChoice}! Human wins!`);
+        alert(`${humanChoice} beets ${computerChoice}! Human wins!`);
         return "human";
     }
 
@@ -43,10 +44,10 @@ function playRound(humanChoice, computerChoice)
     {
         if(computerChoice === "scizzors")
         {
-            console.log(`${computerChoice} beets ${humanChoice}! Computer wins!`);
+            alert(`${computerChoice} beets ${humanChoice}! Computer wins!`);
             return "computer";
         }
-        console.log(`${humanChoice} beets ${computerChoice}! Human wins!`);
+        alert(`${humanChoice} beets ${computerChoice}! Human wins!`);
         return "human";
     }
 
@@ -54,10 +55,10 @@ function playRound(humanChoice, computerChoice)
     {
         if(computerChoice === "paper")
         {
-            console.log(`${computerChoice} beets ${humanChoice}! Computer wins!`);
+            alert(`${computerChoice} beets ${humanChoice}! Computer wins!`);
             return "computer";
         }
-        console.log(`${humanChoice} beets ${computerChoice}! Human wins!`);
+        alert(`${humanChoice} beets ${computerChoice}! Human wins!`);
         return "human";
     }
 }
@@ -70,6 +71,11 @@ function playGame()
     for(let i = 1; i <= 5; i++)
     {
         const humanSelection = getHumanChoice();
+        if(humanSelection === "none")
+        {
+            alert("computer wins!")
+            break;
+        }
         const computerSelection = getComputerChoice();
 
         let winner = playRound(humanSelection, computerSelection);
@@ -80,11 +86,11 @@ function playGame()
     }
 
     if(humanScore > computerScore)
-        console.log("human wins!");
+        alert("human wins!");
     else if(humanScore < computerScore)
-        console.log("computer wins!");
+        alert("computer wins!");
     else
-        console.log("even");
+        alert("even");
 
 }
 
