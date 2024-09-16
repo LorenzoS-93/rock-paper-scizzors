@@ -86,11 +86,14 @@ function playGame()
     }
 
     if(humanScore > computerScore)
-        alert("human wins!");
+        alert(`human:${humanScore} computer:${computerScore} 
+        human wins!`);
     else if(humanScore < computerScore)
-        alert("computer wins!");
+        alert(`human:${humanScore} computer:${computerScore} 
+        computer wins!`);
     else
-        alert("even");
+    alert(`human:${humanScore} computer:${computerScore} 
+    even!`);
 
 }
 
