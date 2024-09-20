@@ -1,28 +1,51 @@
 //declaration
 const options = ["rock", "paper", "scizzors"];
+let round = 0;
 let humanScore = 0;
 let computerScore = 0;
 // create a container for the n buttons
+const modal = document.createElement("div");
+document.body.appendChild(modal);
+modal.setAttribute("class", "modal");
+
 const container = document.createElement("div");
-document.body.appendChild(container);
+modal.appendChild(container);
+const header = document.createElement("div");
+container.appendChild(header);
+header.getAttribute("class", "header");
+header.textContent = "Rock, Paper, Scizzors";
+const text = document.createElement("div");
+container.appendChild(text);
+text.getAttribute("class", "text");
+text.textContent = "Lets play!"
+const score = document.createElement("div");
+container.appendChild(score);
+score.getAttribute("class", "score");
 
+const box = document.createElement("div");
+modal.appendChild(box);
+// create n buttons, each with a class and a text equal to the current position of the oprions array
 let docFrag = document.createDocumentFragment();
-for (let i=0; i < options.length ; i++){
-     let elem = document.createElement("button");
-     elem.setAttribute("class", options[i]);
-     elem.textContent = options[i];
-     docFrag.appendChild(elem);
+for (const option of options) {
+    let elem = document.createElement("button");
+    elem.setAttribute("class", option);
+    elem.textContent = option;
+    docFrag.appendChild(elem);
 }
-container.appendChild(docFrag);
-
+box.appendChild(docFrag);
+// choose a number between 0 and 2
 function getComputerChoice() {
     return Math.floor(Math.random() * options.length);
 }
 
+// better modulo fuction that works with negative numbers
 function mod(n, m) {
     return ((n % m) + m) % m;
 }
 
+const nodeList = document.querySelectorAll("button");
+
+// play one round of the game
 function playRound(humanChoice)
 {
     /* This part is a bit tricky
@@ -37,26 +60,37 @@ function playRound(humanChoice)
     c = h - 1 (mod 3), c = h + 1 (mod 3)
     lets use rock, 0, as an example:
     h = 0 => 0 - 1 (mod 3) = 2 = c = scizzors => human wins! */
-    const computerChoice = getComputerChoice();
-    if(computerChoice === mod(options.indexOf(humanChoice) + 1, options.length)) {
-        alert("Computer wins");
-        computerScore++;
-    }
+    if (round <= 5) {
+        const computerChoice = getComputerChoice();
+        if(computerChoice === mod(options.indexOf(humanChoice) + 1, options.length)) {
+            computerScore++;
+            text.textContent = `round: ${round} Computer Wins!`;
+        }
+            
+        else if(computerChoice === mod(options.indexOf(humanChoice) - 1, options.length)) {
+            text.textContent = `round: ${round} Human Wins!`;
+            humanScore++;
+        }
         
-    else if(computerChoice === mod(options.indexOf(humanChoice) - 1, options.length)) {
-        alert("Human wins");
-        humanScore++;
-    }
+        else text.textContent = `round: ${round} Draw!`;
+        console.log(round);
 
-    else alert(`Same choice! No one wins!`);
+    }
+    
+    if (round === 5){
+        if(humanScore > computerScore) text.textContent = "Human Wins!";
+        else if(humanScore < computerScore) text.textContent = "Computer Wins!";
+        else text.textContent = "Draw!"
+    }
+    score.textContent = `human: ${humanScore} computer: ${computerScore}`;
 }
 
-const nodeList = document.querySelectorAll("button");
-
-[].forEach.call(nodeList,function(e) {
-    e.addEventListener("click", () => {
-        playRound(e.getAttribute("class"));
+for(const button of nodeList) {
+    button.addEventListener("click", () => {
+        round++;
+        playRound(button.getAttribute("class"));
     });
-});
+}
+
 
 
