@@ -2,21 +2,28 @@
 const options = ["rock", "paper", "scizzors"];
 let humanScore = 0;
 let computerScore = 0;
+// create a container for the n buttons
+const container = document.createElement("div");
+document.body.appendChild(container);
+
+let docFrag = document.createDocumentFragment();
+for (let i=0; i < options.length ; i++){
+     let elem = document.createElement("button");
+     elem.setAttribute("class", options[i]);
+     elem.textContent = options[i];
+     docFrag.appendChild(elem);
+}
+container.appendChild(docFrag);
 
 function getComputerChoice() {
-    return Math.floor(Math.random() * 3);
+    return Math.floor(Math.random() * options.length);
 }
 
 function mod(n, m) {
     return ((n % m) + m) % m;
 }
 
-function getHumanChoice() {
-    let humanChoice = prompt(`Make your choice ${options[0]}, ${options[1]} or ${options[2]}?`);
-    return humanChoice;
-}
-
-function playRound(humanChoice, computerChoice)
+function playRound(humanChoice)
 {
     /* This part is a bit tricky
     Let's consider the game rock paper scizzors as a permutation of elements of Z3
@@ -30,13 +37,13 @@ function playRound(humanChoice, computerChoice)
     c = h - 1 (mod 3), c = h + 1 (mod 3)
     lets use rock, 0, as an example:
     h = 0 => 0 - 1 (mod 3) = 2 = c = scizzors => human wins! */
-
-    if(computerChoice === mod(options.indexOf(humanChoice) + 1, 3)) {
+    const computerChoice = getComputerChoice();
+    if(computerChoice === mod(options.indexOf(humanChoice) + 1, options.length)) {
         alert("Computer wins");
         computerScore++;
     }
         
-    else if(computerChoice === mod(options.indexOf(humanChoice) - 1, 3)) {
+    else if(computerChoice === mod(options.indexOf(humanChoice) - 1, options.length)) {
         alert("Human wins");
         humanScore++;
     }
@@ -44,33 +51,12 @@ function playRound(humanChoice, computerChoice)
     else alert(`Same choice! No one wins!`);
 }
 
-function playGame()
-{
+const nodeList = document.querySelectorAll("button");
 
-    for(let i = 1; i <= 5; i++)
-    {
-        const humanSelection = getHumanChoice();
-        if (!options.includes(humanSelection)) {
-            alert("computer wins!");
-            computerScore++;
-            continue;
-        }
-        const computerSelection = getComputerChoice();
+[].forEach.call(nodeList,function(e) {
+    e.addEventListener("click", () => {
+        playRound(e.getAttribute("class"));
+    });
+});
 
-        playRound(humanSelection, computerSelection);
-    }
-
-    if(humanScore > computerScore)
-        alert(`human:${humanScore} computer:${computerScore} 
-        human wins!`);
-    else if(humanScore < computerScore)
-        alert(`human:${humanScore} computer:${computerScore} 
-        computer wins!`);
-    else
-        alert(`human:${humanScore} computer:${computerScore} 
-    even!`);
-
-}
-
-playGame();
 
