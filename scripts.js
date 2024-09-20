@@ -1,88 +1,63 @@
-function getComputerChoice()
-{
-    let choice = Math.random()
+//declaration
+const options = ["rock", "paper", "scizzors"];
+let humanScore = 0;
+let computerScore = 0;
 
-    if(choice <= 1/3)
-        return "rock"
-    if(choice <= 2/3)
-        return "paper"
-    return "scizzors"
+function getComputerChoice() {
+    return Math.floor(Math.random() * 3);
 }
 
-function getHumanChoice()
-{
-    let choice = prompt(`Disclaimer: The program is not case sensitive
-                        A choice that is not one of the above will lead to an 
-                        error.
-                        Make your choice Rock, Paper or Scizzors?`);
-    let str = choice.toLowerCase();
-    if((str === "rock") || (str === "paper") || (str === "scizzors")) 
-        return str
-    return "none"
+function mod(n, m) {
+    return ((n % m) + m) % m;
+}
+
+function getHumanChoice() {
+    let humanChoice = prompt(`Make your choice ${options[0]}, ${options[1]} or ${options[2]}?`);
+    return humanChoice;
 }
 
 function playRound(humanChoice, computerChoice)
 {
-    if(humanChoice === computerChoice)
-    {
-        alert("Same choice! No one wins!")
-        return "none";
+    /* This part is a bit tricky
+    Let's consider the game rock paper scizzors as a permutation of elements of Z3
+    So rock = 0, paper = 1, scizzors = 2,
+    each round consist in the human choosing one of this 3 number and compare with the computer choice
+    if the human choose 1 is easy, he wins vs 0 and loose vs 2 so we can build an easy function as follow
+    lets consider c = computerChoice and h = humanChoice
+    c = h - 1 => human wins, if c = h + 1 => computer wins.
+    But we are in Z3 and it makes no sense to think of 0 - 1, human choose rock, or 2 + 1, human choose scizzors
+    but if we rewrite the equations as follow it makes a lot of sense
+    c = h - 1 (mod 3), c = h + 1 (mod 3)
+    lets use rock, 0, as an example:
+    h = 0 => 0 - 1 (mod 3) = 2 = c = scizzors => human wins! */
+
+    if(computerChoice === mod(options.indexOf(humanChoice) + 1, 3)) {
+        alert("Computer wins");
+        computerScore++;
+    }
+        
+    else if(computerChoice === mod(options.indexOf(humanChoice) - 1, 3)) {
+        alert("Human wins");
+        humanScore++;
     }
 
-    if (humanChoice === "rock")
-    {
-        if(computerChoice === "paper")
-        {
-            alert(`${computerChoice} beets ${humanChoice}! Computer wins!`);
-            return "computer";
-        }
-        alert(`${humanChoice} beets ${computerChoice}! Human wins!`);
-        return "human";
-    }
-
-    if (humanChoice === "paper")
-    {
-        if(computerChoice === "scizzors")
-        {
-            alert(`${computerChoice} beets ${humanChoice}! Computer wins!`);
-            return "computer";
-        }
-        alert(`${humanChoice} beets ${computerChoice}! Human wins!`);
-        return "human";
-    }
-
-    if (humanChoice === "scizzors")
-    {
-        if(computerChoice === "paper")
-        {
-            alert(`${computerChoice} beets ${humanChoice}! Computer wins!`);
-            return "computer";
-        }
-        alert(`${humanChoice} beets ${computerChoice}! Human wins!`);
-        return "human";
-    }
+    else alert(`Same choice! No one wins!`);
 }
 
 function playGame()
 {
-    let humanScore = 0;
-    let computerScore = 0;
 
     for(let i = 1; i <= 5; i++)
     {
         const humanSelection = getHumanChoice();
-        if(humanSelection === "none")
-        {
-            alert("computer wins!")
-            break;
+        if (!options.includes(humanSelection)) {
+            alert("computer wins!");
+            computerScore++;
+            continue;
         }
         const computerSelection = getComputerChoice();
 
-        let winner = playRound(humanSelection, computerSelection);
-        if (winner === "human")
-            humanScore++;
-        if (winner === "computer")
-            computerScore++;
+        playRound(humanSelection, computerSelection);
     }
 
     if(humanScore > computerScore)
@@ -92,7 +67,7 @@ function playGame()
         alert(`human:${humanScore} computer:${computerScore} 
         computer wins!`);
     else
-    alert(`human:${humanScore} computer:${computerScore} 
+        alert(`human:${humanScore} computer:${computerScore} 
     even!`);
 
 }
