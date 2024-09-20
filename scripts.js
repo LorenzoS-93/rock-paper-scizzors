@@ -60,28 +60,26 @@ function playRound(humanChoice)
     c = h - 1 (mod 3), c = h + 1 (mod 3)
     lets use rock, 0, as an example:
     h = 0 => 0 - 1 (mod 3) = 2 = c = scizzors => human wins! */
-    if (round <= 5) {
+    if (humanScore < 5 && computerScore < 5) {
         const computerChoice = getComputerChoice();
         if(computerChoice === mod(options.indexOf(humanChoice) + 1, options.length)) {
             computerScore++;
-            text.textContent = `round: ${round} Computer Wins!`;
+            text.textContent = `round: ${round} Computer win the round!`;
         }
             
         else if(computerChoice === mod(options.indexOf(humanChoice) - 1, options.length)) {
-            text.textContent = `round: ${round} Human Wins!`;
+            text.textContent = `round: ${round} Human win the round!`;
             humanScore++;
         }
         
-        else text.textContent = `round: ${round} Draw!`;
+        else text.textContent = `round: ${round} Round is a draw!`;
         console.log(round);
 
     }
     
-    if (round === 5){
-        if(humanScore > computerScore) text.textContent = "Human Wins!";
-        else if(humanScore < computerScore) text.textContent = "Computer Wins!";
-        else text.textContent = "Draw!"
-    }
+    else if (humanScore === 5) text.textContent = "Human Wins!";
+    else text.textContent = "Computer Wins!";
+
     score.textContent = `human: ${humanScore} computer: ${computerScore}`;
 }
 
